@@ -28,7 +28,20 @@ export default function UserList() {
     const response = await fetch('http://localhost:3000/api/users')
     const data = await response.json()
     
-    return data;
+    const users = data.users.map(user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: new Date(user.createdAt).toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        }),
+      }
+    });
+
+    return users;
   })
 
   const isWideVersion = useBreakpointValue({
@@ -82,7 +95,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.users.map(user => {
+                  {data.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
